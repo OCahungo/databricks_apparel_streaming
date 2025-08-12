@@ -85,7 +85,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ Comments help future maintainers understand the table's purpose. Use clear, business-focused descriptions.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ These columns provide lineage and traceability, which are critical for audits and debugging data issues.
-  - [ ] Cast all columns to their specified types (e.g., `transaction_id` to `int`, `event_time` to `timestamp`, `unit_price` to `double`).
+  - [ ] Cast all columns to their specified types (e.g., `transaction_id` to `int`, `event_time` to `timestamp`, `unit_price` to `double`). Use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.
     - _Business logic:_ Enforcing types ensures consistency for analytics and prevents silent errors. Think about what each type means for business logic (e.g., `unit_price` as double for currency calculations).
   - [ ] **Set Failure Condition:** The pipeline must fail if `transaction_id` is `NULL`.
     - _Business logic:_ A missing transaction ID means the sale cannot be tracked or joined to other data. This is a critical business rule.
@@ -100,7 +100,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ Use comments to clarify the source and business role of the table.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ Track when and where customer data was ingested for compliance and troubleshooting.
-  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns).
     - _Business logic:_ Proper types help with downstream joins and analytics. For example, casting `age` to integer allows for age-based segmentation.
   - [ ] **Set Failure Condition:** The pipeline must fail if `customer_id` is `NULL`.
     - _Business logic:_ Customer ID is the primary key for all customer analytics. Missing IDs break referential integrity.
@@ -115,7 +115,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ Comments clarify the business role and source of the product data.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ These columns help track product data lineage and support troubleshooting.
-  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns).
     - _Business logic:_ Type enforcement is key for analytics and reporting. For example, casting `price` to double ensures correct calculations.
   - [ ] **Set Failure Condition:** The pipeline must fail if `product_id` is `NULL`.
     - _Business logic:_ Product ID is required for all product-level analytics and joins.
@@ -128,7 +128,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ Comments help clarify the business context and source of the store data.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ Track store data lineage for audits and troubleshooting.
-  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns).
     - _Business logic:_ Type enforcement ensures store data can be joined and analyzed reliably.
   - [ ] **Set Failure Condition:** The pipeline must fail if `store_id` is `NULL`.
     - _Business logic:_ Store ID is the key for all store-level analytics and reporting.
