@@ -6,7 +6,7 @@
 
 Thanks for your interest in testing out my Databricks DLT Apparel Pipeline project! I'm excited to hear what you think.
 
-You can get started by importing the repo into a free Databricks account. The ProjectPlan.md file walks you through everything.
+You can get started by importing the repo into a free Databricks account. The <a href="ProjectPlan.md">ProjectPlan.md</a> file walks you through everything.
 
 My main goal is to make this as useful as possible for learners. As you go, could you let me know:
 
@@ -17,7 +17,7 @@ There's no pressure, but any feedback you could provide on these points would be
 
 Let me know if you run into any issues!
 
-Please feel free to connect with me <a href="https://www.linkedin.com/in/jrlasak/">LinkedIn</a> including a connection message or send me an email hi@dataengineer.wiki (preferred)
+If you have any questions, feedback, or run into any problems, feel free to reach out by emailing me at hi@dataengineer.wiki or by starting a discussion on the GitHub repository.
 
 ## 1. Context and Goal
 
