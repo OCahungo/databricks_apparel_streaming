@@ -2,11 +2,13 @@
 
 > This project is an independent educational resource and is not endorsed by Databricks, Inc. "Databricks" is a registered trademark of Databricks, Inc.
 
+Follow me on [Linkedin](https://www.linkedin.com/in/jrlasak/) for useful Databricks projects and tips. Training materials are also available on my website: [dataengineer.wiki](https://dataengineer.wiki)
+
 ## Note to testers!
 
 Thanks for your interest in testing out my Databricks DLT Apparel Pipeline project! I'm excited to hear what you think.
 
-You can get started by importing the repo into a free Databricks account. The <a href="ProjectPlan.md">ProjectPlan.md</a> file walks you through everything.
+You can get started by importing the repo into a free Databricks account. The [ProjectPlan.md](ProjectPlan.md) file walks you through everything.
 
 My main goal is to make this as useful as possible for learners. As you go, could you let me know:
 
@@ -44,11 +46,11 @@ Feel free to reach out to me if you have any questions. My contact details are a
 - DLT pipeline
   - You'll create a DLT pipeline to ingest, clean and aggregate raw data.
   - At the end, your pipeline will look like this
-    <img src="sources/DLT.png" />
+    ![](sources/DLT.png)
 
 ## 4. How to start?
 
-Read <a href="ProjectPlan.md">ProjectPlan.md</a>
+Read [ProjectPlan.md](ProjectPlan.md)
 
 ---
 
