@@ -1,12 +1,27 @@
 # Project Plan
 
-> Note: Many files in this repository rely on `variables.py` to configure your environment and determine where synthetic data is generated. If you wish to change the catalog name or other object names, simply update them in `variables.py`.
-> If you see a "Resources exhausted" error, stop the `data_generator.py` script if it's running, and try again after a short break. This is a limitation of Databricks Free Edition.
+## Information
 
-> **Need help or inspiration?**  
-> If you encounter any challenges or uncertainties while working through this project, remember that a complete reference implementation is available in the "final dlt pipeline" folder. Reviewing the final code can help clarify requirements, demonstrate best practices, and provide guidance on how to structure your pipeline.
->
-> Don't hesitate to use this resource to compare your approach, troubleshoot issues, or deepen your understanding of Delta Live Tables and Databricks workflows.
+- **Configuration:**  
+  Many files in this repository rely on `variables.py` to configure your environment and determine where synthetic data is generated. To change the catalog name or other object names, simply update them in `variables.py`.
+
+- **Resource Limits:**  
+  If you see a "Resources exhausted" error:
+
+  - Stop the `data_generator.py` script if it's running.
+  - Wait a short time before trying again.
+  - _Note: This is a limitation of Databricks Free Edition._
+
+- **Help & Inspiration:**  
+  If you encounter challenges or uncertainties:
+  - A complete reference implementation is available in the "final dlt pipeline" folder.
+  - Reviewing the final code can clarify requirements, demonstrate best practices, and guide your pipeline structure.
+  - Use this resource to:
+    - Compare your approach
+    - Troubleshoot issues
+    - Deepen your understanding of Delta Live Tables and Databricks workflows
+
+---
 
 ## Databricks Configuration Requirements
 
