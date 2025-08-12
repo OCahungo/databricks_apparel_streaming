@@ -1,5 +1,7 @@
 # Databricks DLT Apparel Pipeline: A Learning Project
 
+> This project is an independent educational resource and is not endorsed by Databricks, Inc. "Databricks" is a registered trademark of Databricks, Inc.
+
 ## Note to testers!
 
 Thanks for your interest in testing out my Databricks DLT Apparel Pipeline project! I'm excited to hear what you think.

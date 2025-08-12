@@ -1,8 +1,12 @@
 # Project Plan
 
-> Note: many files in this repository use the variables.py file for setting up an environment for you, generating syntetic data in a proper location. If you want to use a different name for the catalog, and other objects, update it there.
+> Note: Many files in this repository rely on `variables.py` to configure your environment and determine where synthetic data is generated. If you wish to change the catalog name or other object names, simply update them in `variables.py`.
+> If you see a "Resources exhausted" error, stop the `data_generator.py` script if it's running, and try again after a short break. This is a limitation of Databricks Free Edition.
 
-> Note: if you ever get stuck, feel free to check the final code included under the "final dlt pipeline" folder.
+> **Need help or inspiration?**  
+> If you encounter any challenges or uncertainties while working through this project, remember that a complete reference implementation is available in the "final dlt pipeline" folder. Reviewing the final code can help clarify requirements, demonstrate best practices, and provide guidance on how to structure your pipeline.
+>
+> Don't hesitate to use this resource to compare your approach, troubleshoot issues, or deepen your understanding of Delta Live Tables and Databricks workflows.
 
 ## Databricks Configuration Requirements
 
@@ -55,6 +59,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
   - Focus on schema enforcement and metadata. This is your first line of defense against bad data.
   - Use the variables from `variables.py` for paths and table names to keep your code maintainable.
+  - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
 - **Task 1: Create `01_bronze.bronze_sales` Table**
 
@@ -123,6 +128,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 - **Silver Layer Tips:**
   - This is where you apply business logic and data quality rules. Use expectations to catch and handle dirty data.
   - Think about how CDC (Change Data Capture) and SCD2 (Slowly Changing Dimension Type 2) work in practice.
+  - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
 #### Part A: Create Intermediate Cleaned Views
 
@@ -324,6 +330,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
   - Focus on joins and aggregations. This is where you create business value from your data.
   - Think about how analysts will use these tables for reporting and BI.
+  - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
 - **Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table**
 
