@@ -23,7 +23,7 @@ Welcome to the Apparel Retail 360 project! In today's data-driven world, retail 
 
 You will take on the role of a Data Engineer tasked with building an end-to-end analytics platform. Using Delta Live Tables, you will ingest raw data, progressively clean and transform it through a medallion architecture (Bronze, Silver, and Gold layers), and ultimately produce curated datasets ready for business intelligence and reporting.
 
-Feel free to reach out to me if you have any questions. My contact details are available on JakubLasak.com.
+Feel free to reach out to me if you have any questions. My contact details are available on dataengineer.wiki.
 
 ## 2. By completing this project, you will gain hands-on experience with:
 

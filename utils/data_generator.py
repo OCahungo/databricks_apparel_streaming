@@ -9,7 +9,7 @@ The primary purpose is to produce realistic but imperfect data that mimics a rea
 scenario, allowing the DLT pipeline to be tested on its ability to handle data quality
 issues, transformations, and referential integrity.
 
-Feel free to reach out to me if you have any questions. My contact details are available on JakubLasak.com.
+Feel free to reach out to me if you have any questions. My contact details are available on dataengineer.wiki.
 
 ------------------------------------------------------------------------------------
 Data Streams Generated
