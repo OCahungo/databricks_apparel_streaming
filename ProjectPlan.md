@@ -67,7 +67,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 ### ✅ Bronze Layer: Raw Data Ingestion
 
-- **Goal:** Ingest raw source data, add metadata, and enforce critical schema rules.
+- **Goal:** Ingest raw source data as streams, add metadata for lineage, and enforce critical schema rules. This layer is the foundation for all downstream processing and should guarantee that only structurally valid records enter the pipeline.
 - **Source Path:** `/Volumes/apparel_store/00_landing/streaming/`
 - **Table Name Prefix:** `01_bronze.`
 - **Bronze Layer Tips:**
@@ -78,8 +78,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 1: Create `01_bronze.bronze_sales` Table**
 
-  - _Business logic:_ Sales data is the core fact table for retail analytics. Each transaction should represent a real sale event, so ensure the data matches business expectations (e.g., no negative prices, valid timestamps). Consider how missing or duplicate transaction IDs could impact downstream reporting.
-  - _Tip:_ After writing this task, run the pipeline to see if the table is created and data flows in. Check for schema mismatches or ingestion errors early.
+  - _Business logic:_ Ingest raw sales transactions as a stream, enforce schema by casting columns to correct types, and add metadata (`ingest_timestamp`, `source_file_path`) for auditability. Fail the pipeline if any record is missing a `transaction_id`, ensuring only valid sales events are processed downstream.
 
   - [ ] Read as a stream from the `sales` directory - use the `RAW_SALES_PATH` variable.
   - [ ] Add `comment`: "Raw sales data".
@@ -93,43 +92,43 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 2: Create `01_bronze.bronze_customers` Table**
 
-  - _Business logic:_ Customer data is essential for segmentation and lifetime value analysis. Ensure each record represents a real customer and matches business requirements (e.g., valid emails, realistic ages).
+  - _Business logic:_ Ingest raw customer records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `customer_id`, ensuring referential integrity for all downstream customer analytics.
   - _Tip:_ Run the pipeline after this step to validate customer data ingestion and catch schema or data quality issues early.
 
-  - [ ] Read as a stream from the `customers` directory.- use the `RAW_CUSTOMERS_PATH` variable.
+  - [ ] Read as a stream from the `customers` directory - use the `RAW_CUSTOMERS_PATH` variable.
   - [ ] Add `comment`: "Raw customers data from landing zone".
     - _Business logic:_ Use comments to clarify the source and business role of the table.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ Track when and where customer data was ingested for compliance and troubleshooting.
-  - [ ] Cast all columns to their specified types.
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
     - _Business logic:_ Proper types help with downstream joins and analytics. For example, casting `age` to integer allows for age-based segmentation.
   - [ ] **Set Failure Condition:** The pipeline must fail if `customer_id` is `NULL`.
     - _Business logic:_ Customer ID is the primary key for all customer analytics. Missing IDs break referential integrity.
 
 - **Task 3: Create `01_bronze.bronze_products` Table**
 
-  - _Business logic:_ Product data powers inventory, sales, and merchandising analytics. Ensure each product has a valid ID, name, and price. Watch for outliers (e.g., extremely high or low prices).
+  - _Business logic:_ Ingest raw product records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `product_id`, ensuring all products are uniquely identifiable for inventory and sales analytics.
   - _Tip:_ Run the pipeline after this step to check for product data issues and validate schema enforcement.
 
-  - [ ] Read as a stream from the `items` directory .- use the `RAW_PRODUCTS_PATH` variable.
-    - [ ] Add `comment`: "Raw products data".
+  - [ ] Read as a stream from the `items` directory - use the `RAW_PRODUCTS_PATH` variable.
+  - [ ] Add `comment`: "Raw products data".
     - _Business logic:_ Comments clarify the business role and source of the product data.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ These columns help track product data lineage and support troubleshooting.
-  - [ ] Cast all columns to their specified types.
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
     - _Business logic:_ Type enforcement is key for analytics and reporting. For example, casting `price` to double ensures correct calculations.
   - [ ] **Set Failure Condition:** The pipeline must fail if `product_id` is `NULL`.
     - _Business logic:_ Product ID is required for all product-level analytics and joins.
 
 - **Task 4: Create `01_bronze.bronze_stores` Table**
-  - [ ] Read as a stream from the `stores` directory .- use the `RAW_STORES_PATH` variable.
-    - _Business logic:_ Store data is used for location-based analytics, performance tracking, and inventory management. Ensure each store has a valid ID and location.
-    - _Tip:_ Run the pipeline after this step to confirm store data is ingested correctly and matches business expectations.
+  - _Business logic:_ Ingest raw store records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `store_id`, ensuring all stores are uniquely tracked for location-based analytics.
+  - _Tip:_ Run the pipeline after this step to confirm store data is ingested correctly and matches business expectations.
+  - [ ] Read as a stream from the `stores` directory - use the `RAW_STORES_PATH` variable.
   - [ ] Add `comment`: "Raw stores data".
     - _Business logic:_ Comments help clarify the business context and source of the store data.
   - [ ] Add `ingest_timestamp` and `source_file_path` columns.
     - _Business logic:_ Track store data lineage for audits and troubleshooting.
-  - [ ] Cast all columns to their specified types.
+  - [ ] Cast all columns to their specified types (use <a href="SynteticDataGenerator.md">SynteticDataGenerator.md</a> for information about available columns.)
     - _Business logic:_ Type enforcement ensures store data can be joined and analyzed reliably.
   - [ ] **Set Failure Condition:** The pipeline must fail if `store_id` is `NULL`.
     - _Business logic:_ Store ID is the key for all store-level analytics and reporting.
@@ -138,10 +137,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 ### ✅ Silver Layer: Cleansed & Conformed Data
 
-- **Goal:** Apply detailed data quality rules, handle historical data, and separate fact streams.
+- **Goal:** Apply incremental data quality rules, cleanse and conform records, and prepare for historical tracking and analytics. This layer improves data reliability and prepares dimensions and facts for business use.
 - **Table Name Prefix:** `02_silver.`
 - **Silver Layer Tips:**
-  - This is where you apply business logic and data quality rules. Use expectations to catch and handle dirty data.
+  - Apply expectations to catch and handle dirty data. Use views for intermediate cleansing and tables for historical tracking.
   - Think about how CDC (Change Data Capture) and SCD2 (Slowly Changing Dimension Type 2) work in practice.
   - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
@@ -149,8 +148,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 5: Create the `customers_cleaned_stream` View**
 
-  - _Business logic:_ Cleansing customer data is crucial for accurate segmentation and marketing. Consider how invalid emails or unrealistic ages could affect business decisions. Use expectations to catch common data issues.
-  - _Tip:_ After implementing this, run the pipeline and inspect the output. Are invalid records being flagged or dropped as expected?
+  - _Business logic:_ Cleanse customer data by enforcing valid IDs, realistic ages, non-negative loyalty points, and valid gender values. Warn on invalid emails and outlier ages, but only drop records with missing IDs. This ensures only usable customer records are tracked, while allowing for business review of questionable but not fatal data issues.
 
   - [ ] Read from the `bronze_customers` stream.
   - [ ] Add `comment`: "QC for customers stream".
@@ -169,7 +167,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 6: Create the `products_cleaned_stream` View**
 
-  - _Business logic:_ Product data must be accurate for inventory, pricing, and sales analysis. Watch for missing IDs, unrealistic prices, or invalid categories.
+  - _Business logic:_ Cleanse product data by enforcing valid IDs and realistic prices, and warn on negative stock, invalid categories, or missing brands. Only drop records with missing IDs or out-of-range prices, ensuring inventory and sales analytics are based on trustworthy product records.
   - _Tip:_ Run the pipeline after this step to see how product data is cleaned and flagged.
 
   - [ ] Read from the `bronze_products` stream.
@@ -189,7 +187,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 7: Create the `stores_cleaned_stream` View**
 
-  - _Business logic:_ Store data impacts location-based analytics and operational decisions. Cleansing ensures only valid stores are analyzed.
+  - _Business logic:_ Cleanse store data by enforcing valid IDs and status, and replace missing manager names with 'Unknown' for reporting consistency. Warn on missing manager names and invalid status, but only drop records with missing IDs. This ensures store-level analytics are reliable and inclusive.
   - _Tip:_ Run the pipeline after this step to validate store data cleaning.
 
   - [ ] Read from the `bronze_stores` stream.
@@ -206,7 +204,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
       - _Business logic:_ Store status affects operational reporting and analysis.
 
 - **Task 8: Create the `sales_cleaned_stream` View**
-  - _Business logic:_ Cleansing sales data ensures only valid transactions are analyzed. Watch for invalid payment methods or negative discounts.
+  - _Business logic:_ Cleanse sales data by enforcing valid payment methods and non-negative discounts, and add a derived date column for time-based analytics. Apply watermarking to handle late-arriving data, ensuring streaming analytics are robust and timely.
   - _Tip:_ Run the pipeline after this step to see how sales data is cleaned and flagged.
   - [ ] Read from the `bronze_sales` stream.
   - [ ] Add `comment`: "QC for sales stream (fact)".
@@ -225,8 +223,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 9: Create the `02_silver.silver_customers` Table**
 
-  - _Business logic:_ Tracking customer changes over time is essential for historical analysis and compliance. SCD2 lets you see how customer attributes evolve.
-  - _Tip:_ Run the pipeline after implementing this to see how history is tracked and how current vs. historical records are managed.
+  - _Business logic:_ Track customer attribute changes over time using SCD2, enabling historical analysis and compliance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored to prevent accidental overwrites.
 
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.customers_cleaned_stream` as the source.
   - [ ] Set `keys` to `["customer_id"]`.
@@ -242,8 +239,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 10: Create the `02_silver.silver_products` Table**
 
-  - _Business logic:_ Product attributes change over time (e.g., price updates, rebranding). SCD2 lets you analyze trends and changes.
-  - _Tip:_ Run the pipeline after this step to see how product history is tracked and used in analytics.
+  - _Business logic:_ Track product attribute changes over time using SCD2, enabling analysis of pricing, branding, and inventory trends. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
 
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.products_cleaned_stream` as the source.
   - [ ] Set `keys` to `["product_id"]`.
@@ -258,8 +254,9 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ SCD2 tracks full history, not just current state.
 
 - **Task 11: Create the `02_silver.silver_stores` Table**
-  - _Business logic:_ Store attributes (e.g., manager, status) change over time. SCD2 lets you analyze operational changes and performance.
-  - _Tip:_ Run the pipeline after this step to see how store history is tracked and used in reporting.
+
+  - _Business logic:_ Track store attribute changes over time using SCD2, enabling analysis of operational changes and performance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
+
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.stores_cleaned_stream` as the source.
   - [ ] Set `keys` to `["store_id"]`.
     - _Business logic:_ Store ID is the unique identifier for tracking changes.
@@ -276,8 +273,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 12: Create the `02_silver.silver_sales_transactions` Table**
 
-  - _Business logic:_ Only positive quantities represent actual sales. Filtering and expectations ensure only valid transactions are analyzed.
-  - _Tip:_ Run the pipeline after this step to validate sales transaction filtering and expectations.
+  - _Business logic:_ Filter sales records to include only positive quantities (actual sales), and drop records with invalid discounts or missing foreign keys. This ensures only valid sales transactions are available for analytics.
 
   - [ ] Read from the `live.sales_cleaned_stream`.
   - [ ] Filter to include only records where `quantity > 0`.
@@ -293,7 +289,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
       - _Business logic:_ Product ID is required for all product-level analytics.
 
 - **Task 13: Create the `02_silver.silver_returns_transactions` Table**
-  - _Business logic:_ Negative quantities represent returns. Transforming and filtering ensures returns are tracked separately from sales.
+  - _Business logic:_ Filter sales records to include only negative quantities (returns), transform to absolute values for reporting, and drop records with invalid discounts or missing foreign keys. This ensures returns are tracked separately and accurately.
   - _Tip:_ Run the pipeline after this step to validate returns processing and expectations.
   - [ ] Read from the `live.sales_cleaned_stream`.
   - [ ] Filter to include only records where `quantity < 0`.
@@ -312,8 +308,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 14: Create `silver_customers_current` View**
 
-  - _Business logic:_ Current views provide the latest snapshot for analytics and reporting. Filtering for current records ensures up-to-date lookups.
-  - _Tip:_ Run the pipeline after this step to validate current view logic and ensure only active records are
+  - _Business logic:_ Filter SCD2 customer table for current records (no end date), providing the latest snapshot for analytics and lookups.
+
   - [ ] Read from `02_silver.silver_customers`.
         included.
   - [ ] Filter for records where the `__END_AT` column is `NULL`.
@@ -321,7 +317,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 15: Create `silver_products_current` View**
 
-  - _Business logic:_ Current product views ensure analytics use the latest product attributes.
+  - _Business logic:_ Filter SCD2 product table for current records, ensuring analytics use the latest product attributes.
   - _Tip:_ Run the pipeline after this step to validate current product view logic.
 
   - [ ] Read from `02_silver.silver_products`.
@@ -329,7 +325,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - _Business logic:_ Only records without an end date are considered current.
 
 - **Task 16: Create `silver_stores_current` View**
-  - _Business logic:_ Current store views ensure analytics use the latest store attributes.
+  - _Business logic:_ Filter SCD2 store table for current records, ensuring analytics use the latest store attributes.
   - _Tip:_ Run the pipeline after this step to validate current store view logic.
   - [ ] Read from `02_silver.silver_stores`.
   - [ ] Filter for records where the `__END_AT` column is `NULL`.
@@ -339,7 +335,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 ### **✅ Gold Layer: Business-Ready Analytics**
 
-- **Goal:** Create denormalized and aggregated tables for direct use by analysts and BI tools.
+- **Goal:** Create denormalized and aggregated tables for direct use by analysts and BI tools. This layer delivers business value by joining, enriching, and summarizing data for reporting and decision-making.
 - **Table Name Prefix:** `03_gold.`
 - **Gold Layer Tips:**
 
@@ -349,8 +345,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table**
 
-  - _Business logic:_ Denormalizing sales facts enables fast, flexible analytics for BI and reporting. Joins enrich sales data with customer, product, and store attributes.
-  - _Tip:_ Run the pipeline after this step to validate joins and schema. Check for missing or mismatched keys.
+  - _Business logic:_ Join sales transactions with current dimension tables to enrich each sale with customer, product, and store attributes. Use left joins to ensure all sales are included, even if some dimension data is missing. Alias columns for clarity and usability in BI tools.
+
   - [ ] Read as a stream from `LIVE.02_silver.silver_sales_transactions`.
   - [ ] Read `LIVE.silver_customers_current`, `LIVE.silver_products_current`, and `LIVE.silver_stores_current` as static/lookup tables.
     - _Business logic:_ Lookup tables provide the latest dimension attributes for each sale.
@@ -361,7 +357,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 18: Create `03_gold.gold_daily_sales_by_store` Aggregate Table**
 
-  - _Business logic:_ Daily sales by store is a key metric for retail performance tracking. Aggregations provide actionable insights for managers.
+  - _Business logic:_ Aggregate denormalized sales facts by store and day, calculating total revenue, transaction count, items sold, and unique customers. This enables daily performance tracking for each store.
   - _Tip:_ Run the pipeline after this step to validate aggregations and reporting logic.
   - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
   - [ ] **Group by:**
@@ -412,6 +408,9 @@ To run this project end-to-end, complete the following setup steps in your Datab
     - `first_purchase_date`: `min(event_time)` cast to date.
       - _Business logic:_ First purchase date helps track customer lifecycle.
     - `last_purchase_date`: `max(event_time)` cast to date.
+      - _Business logic:_ Last purchase date helps track retention.
+    - `avg_order_value`: `round(avg(total_amount), 2)`
+      - _Business logic:_ Average order value is a key marketing metric.
       - _Business logic:_ Last purchase date helps track retention.
     - `avg_order_value`: `round(avg(total_amount), 2)`
       - _Business logic:_ Average order value is a key marketing metric.
