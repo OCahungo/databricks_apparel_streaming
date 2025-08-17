@@ -74,6 +74,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
   - Use the variables from `variables.py` for paths and table names to keep your code maintainable.
   - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
+---
+
 - **Task 1: Create `01_bronze.bronze_sales` Table**
 
   - Tips
@@ -163,6 +165,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
   - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
 
 #### Part A: Create Intermediate Cleaned Views
+
+---
 
 - **Task 5: Create the `customers_cleaned_stream` View**
 
@@ -261,6 +265,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 #### Part B: Create Materialized Dimension Tables with History (SCD Type 2)
 
+---
+
 - **Task 9: Create the `02_silver.silver_customers` Table**
 
   - Tips
@@ -326,6 +332,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 #### Part C: Create Materialized Fact Tables
 
+---
+
 - **Task 12: Create the `02_silver.silver_sales_transactions` Table**
 
   - Tips
@@ -372,6 +380,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
 ---
 
 #### Part D: Create "Current" Dimension Views
+
+---
 
 - **Task 14: Create `silver_customers_current` View**
 
@@ -423,6 +433,8 @@ To run this project end-to-end, complete the following setup steps in your Datab
   - Focus on joins and aggregations. This is where you create business value from your data.
   - Think about how analysts will use these tables for reporting and BI.
   - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
+
+---
 
 - **Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table**
 
