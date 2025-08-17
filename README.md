@@ -50,8 +50,8 @@ Feel free to reach out to me if you have any questions. My contact details are a
 
 ## 4. Prerequisites
 
-- Intermediate Python (alternatively, SQL if you prefer to write the code in SQL). The project is focused on using Python for the DLT pipeline.
-- Intermediate Databricks knowledge. You might be able to complete this project with Junior experience, but it might be harder to follow the tasks on your own. In such cases, feel free to copy snippets of code from the `final_dlt.py` file and just run and observe the DLT pipeline.
+- Intermediate Python (or SQL, if you prefer). The project focuses on using Python for the DLT pipeline.
+- Intermediate Databricks knowledge. While you may be able to complete this project with junior-level experience, it may be more difficult to follow the tasks independently. If you need help, feel free to copy code snippets from the final_dlt.py file to run and observe the DLT pipeline.
 
 ## 5. How to start?
 
