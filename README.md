@@ -48,7 +48,12 @@ Feel free to reach out to me if you have any questions. My contact details are a
   - At the end, your pipeline will look like this
     ![](sources/DLT.png)
 
-## 4. How to start?
+## 4. Prerequisites
+
+- Intermediate Python (alternatively, SQL if you prefer to write the code in SQL). The project is focused on using Python for the DLT pipeline.
+- Intermediate Databricks knowledge. You might be able to complete this project with Junior experience, but it might be harder to follow the tasks on your own. In such cases, feel free to copy snippets of code from the `final_dlt.py` file and just run and observe the DLT pipeline.
+
+## 5. How to start?
 
 Read [ProjectPlan.md](ProjectPlan.md)
 

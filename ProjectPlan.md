@@ -76,8 +76,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 1: Create `01_bronze.bronze_sales` Table**
 
-  - _Business logic:_ Ingest raw sales transactions as a stream, enforce schema by casting columns to correct types, and add metadata (`ingest_timestamp`, `source_file_path`) for auditability. Fail the pipeline if any record is missing a `transaction_id`, ensuring only valid sales events are processed downstream.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 1".
+  - Tips
+
+    - _Business logic:_ Ingest raw sales transactions as a stream, enforce schema by casting columns to correct types, and add metadata (`ingest_timestamp`, `source_file_path`) for auditability. Fail the pipeline if any record is missing a `transaction_id`, ensuring only valid sales events are processed downstream.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 1".
 
   - [ ] Read as a stream from the `sales` directory - use the `RAW_SALES_PATH` variable.
   - [ ] Add `comment`: "Raw sales data".
@@ -93,9 +95,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 2: Create `01_bronze.bronze_customers` Table**
 
-  - _Business logic:_ Ingest raw customer records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `customer_id`, ensuring referential integrity for all downstream customer analytics.
-  - _Tip:_ Run the pipeline after this step to validate customer data ingestion and catch schema or data quality issues early.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 2".
+  - Tips
+
+    - _Business logic:_ Ingest raw customer records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `customer_id`, ensuring referential integrity for all downstream customer analytics.
+    - _Tip:_ Run the pipeline after this step to validate customer data ingestion and catch schema or data quality issues early.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 2".
 
   - [ ] Read as a stream from the `customers` directory - use the `RAW_CUSTOMERS_PATH` variable.
   - [ ] Add `comment`: "Raw customers data from landing zone".
@@ -111,9 +115,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 3: Create `01_bronze.bronze_products` Table**
 
-  - _Business logic:_ Ingest raw product records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `product_id`, ensuring all products are uniquely identifiable for inventory and sales analytics.
-  - _Tip:_ Run the pipeline after this step to check for product data issues and validate schema enforcement.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 3".
+  - Tips
+
+    - _Business logic:_ Ingest raw product records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `product_id`, ensuring all products are uniquely identifiable for inventory and sales analytics.
+    - _Tip:_ Run the pipeline after this step to check for product data issues and validate schema enforcement.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 3".
 
   - [ ] Read as a stream from the `items` directory - use the `RAW_PRODUCTS_PATH` variable.
   - [ ] Add `comment`: "Raw products data".
@@ -129,9 +135,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 4: Create `01_bronze.bronze_stores` Table**
 
-  - _Business logic:_ Ingest raw store records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `store_id`, ensuring all stores are uniquely tracked for location-based analytics.
-  - _Tip:_ Run the pipeline after this step to confirm store data is ingested correctly and matches business expectations.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 4".
+  - Tips
+
+    - _Business logic:_ Ingest raw store records as a stream, enforce schema and add lineage metadata. Fail the pipeline if any record is missing a `store_id`, ensuring all stores are uniquely tracked for location-based analytics.
+    - _Tip:_ Run the pipeline after this step to confirm store data is ingested correctly and matches business expectations.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 4".
 
   - [ ] Read as a stream from the `stores` directory - use the `RAW_STORES_PATH` variable.
   - [ ] Add `comment`: "Raw stores data".
@@ -158,8 +166,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 5: Create the `customers_cleaned_stream` View**
 
-  - _Business logic:_ Cleanse customer data by enforcing valid IDs, realistic ages, non-negative loyalty points, and valid gender values. Warn on invalid emails and outlier ages, but only drop records with missing IDs. This ensures only usable customer records are tracked, while allowing for business review of questionable but not fatal data issues.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 5".
+  - Tips
+
+    - _Business logic:_ Cleanse customer data by enforcing valid IDs, realistic ages, non-negative loyalty points, and valid gender values. Warn on invalid emails and outlier ages, but only drop records with missing IDs. This ensures only usable customer records are tracked, while allowing for business review of questionable but not fatal data issues.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 5".
 
   - [ ] Read from the `bronze_customers` stream.
   - [ ] Add `comment`: "QC for customers stream".
@@ -180,9 +190,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 6: Create the `products_cleaned_stream` View**
 
-  - _Business logic:_ Cleanse product data by enforcing valid IDs and realistic prices, and warn on negative stock, invalid categories, or missing brands. Only drop records with missing IDs or out-of-range prices, ensuring inventory and sales analytics are based on trustworthy product records.
-  - _Tip:_ Run the pipeline after this step to see how product data is cleaned and flagged.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 6".
+  - Tips
+
+    - _Business logic:_ Cleanse product data by enforcing valid IDs and realistic prices, and warn on negative stock, invalid categories, or missing brands. Only drop records with missing IDs or out-of-range prices, ensuring inventory and sales analytics are based on trustworthy product records.
+    - _Tip:_ Run the pipeline after this step to see how product data is cleaned and flagged.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 6".
 
   - [ ] Read from the `bronze_products` stream.
   - [ ] Add `comment`: "QC for products stream".
@@ -203,9 +215,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 7: Create the `stores_cleaned_stream` View**
 
-  - _Business logic:_ Cleanse store data by enforcing valid IDs and status, and replace missing manager names with 'Unknown' for reporting consistency. Warn on missing manager names and invalid status, but only drop records with missing IDs. This ensures store-level analytics are reliable and inclusive.
-  - _Tip:_ Run the pipeline after this step to validate store data cleaning.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 7".
+  - Tips
+
+    - _Business logic:_ Cleanse store data by enforcing valid IDs and status, and replace missing manager names with 'Unknown' for reporting consistency. Warn on missing manager names and invalid status, but only drop records with missing IDs. This ensures store-level analytics are reliable and inclusive.
+    - _Tip:_ Run the pipeline after this step to validate store data cleaning.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 7".
 
   - [ ] Read from the `bronze_stores` stream.
   - [ ] Add `comment`: "QC for stores stream".
@@ -224,9 +238,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 8: Create the `sales_cleaned_stream` View**
 
-  - _Business logic:_ Cleanse sales data by enforcing valid payment methods and non-negative discounts, and add a derived date column for time-based analytics. Apply watermarking to handle late-arriving data, ensuring streaming analytics are robust and timely.
-  - _Tip:_ Run the pipeline after this step to see how sales data is cleaned and flagged.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 8".
+  - Tips
+
+    - _Business logic:_ Cleanse sales data by enforcing valid payment methods and non-negative discounts, and add a derived date column for time-based analytics. Apply watermarking to handle late-arriving data, ensuring streaming analytics are robust and timely.
+    - _Tip:_ Run the pipeline after this step to see how sales data is cleaned and flagged.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 8".
 
   - [ ] Read from the `bronze_sales` stream.
   - [ ] Add `comment`: "QC for sales stream (fact)".
@@ -247,8 +263,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 9: Create the `02_silver.silver_customers` Table**
 
-  - _Business logic:_ Track customer attribute changes over time using SCD2, enabling historical analysis and compliance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored to prevent accidental overwrites.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 9".
+  - Tips
+
+    - _Business logic:_ Track customer attribute changes over time using SCD2, enabling historical analysis and compliance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored to prevent accidental overwrites.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 9".
 
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.customers_cleaned_stream` as the source.
   - [ ] Set `keys` to `["customer_id"]`.
@@ -266,8 +284,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 10: Create the `02_silver.silver_products` Table**
 
-  - _Business logic:_ Track product attribute changes over time using SCD2, enabling analysis of pricing, branding, and inventory trends. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 10".
+  - Tips
+
+    - _Business logic:_ Track product attribute changes over time using SCD2, enabling analysis of pricing, branding, and inventory trends. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 10".
 
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.products_cleaned_stream` as the source.
   - [ ] Set `keys` to `["product_id"]`.
@@ -285,8 +305,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 11: Create the `02_silver.silver_stores` Table**
 
-  - _Business logic:_ Track store attribute changes over time using SCD2, enabling analysis of operational changes and performance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 11".
+  - Tips
+
+    - _Business logic:_ Track store attribute changes over time using SCD2, enabling analysis of operational changes and performance. Only business-relevant columns are tracked for history, and technical columns are excluded. Null updates are ignored.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 11".
 
   - [ ] Use `dlt.create_auto_cdc_flow` with `live.stores_cleaned_stream` as the source.
   - [ ] Set `keys` to `["store_id"]`.
@@ -306,8 +328,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 12: Create the `02_silver.silver_sales_transactions` Table**
 
-  - _Business logic:_ Filter sales records to include only positive quantities (actual sales), and drop records with invalid discounts or missing foreign keys. This ensures only valid sales transactions are available for analytics.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 12".
+  - Tips
+
+    - _Business logic:_ Filter sales records to include only positive quantities (actual sales), and drop records with invalid discounts or missing foreign keys. This ensures only valid sales transactions are available for analytics.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 12".
 
   - [ ] Read from the `live.sales_cleaned_stream`.
   - [ ] Filter to include only records where `quantity > 0`.
@@ -326,9 +350,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 13: Create the `02_silver.silver_returns_transactions` Table**
 
-  - _Business logic:_ Filter sales records to include only negative quantities (returns), transform to absolute values for reporting, and drop records with invalid discounts or missing foreign keys. This ensures returns are tracked separately and accurately.
-  - _Tip:_ Run the pipeline after this step to validate returns processing and expectations.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 13".
+  - Tips
+
+    - _Business logic:_ Filter sales records to include only negative quantities (returns), transform to absolute values for reporting, and drop records with invalid discounts or missing foreign keys. This ensures returns are tracked separately and accurately.
+    - _Tip:_ Run the pipeline after this step to validate returns processing and expectations.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 13".
 
   - [ ] Read from the `live.sales_cleaned_stream`.
   - [ ] Filter to include only records where `quantity < 0`.
@@ -349,8 +375,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 14: Create `silver_customers_current` View**
 
-  - _Business logic:_ Filter SCD2 customer table for current records (no end date), providing the latest snapshot for analytics and lookups.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 14".
+  - Tips
+
+    - _Business logic:_ Filter SCD2 customer table for current records (no end date), providing the latest snapshot for analytics and lookups.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 14".
 
   - [ ] Read from `02_silver.silver_customers`.
   - [ ] Filter for records where the `__END_AT` column is `NULL`.
@@ -360,9 +388,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 15: Create `silver_products_current` View**
 
-  - _Business logic:_ Filter SCD2 product table for current records, ensuring analytics use the latest product attributes.
-  - _Tip:_ Run the pipeline after this step to validate current product view logic.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 15".
+  - Tips
+
+    - _Business logic:_ Filter SCD2 product table for current records, ensuring analytics use the latest product attributes.
+    - _Tip:_ Run the pipeline after this step to validate current product view logic.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 15".
 
   - [ ] Read from `02_silver.silver_products`.
   - [ ] Filter for records where the `__END_AT` column is `NULL`.
@@ -372,9 +402,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 16: Create `silver_stores_current` View**
 
-  - _Business logic:_ Filter SCD2 store table for current records, ensuring analytics use the latest store attributes.
-  - _Tip:_ Run the pipeline after this step to validate current store view logic.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 16".
+  - Tips
+
+    - _Business logic:_ Filter SCD2 store table for current records, ensuring analytics use the latest store attributes.
+    - _Tip:_ Run the pipeline after this step to validate current store view logic.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 16".
 
   - [ ] Read from `02_silver.silver_stores`.
   - [ ] Filter for records where the `__END_AT` column is `NULL`.
@@ -394,8 +426,10 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table**
 
-  - _Business logic:_ Join sales transactions with current dimension tables to enrich each sale with customer, product, and store attributes. Use left joins to ensure all sales are included, even if some dimension data is missing. Alias columns for clarity and usability in BI tools.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 17".
+  - Tips
+
+    - _Business logic:_ Join sales transactions with current dimension tables to enrich each sale with customer, product, and store attributes. Use left joins to ensure all sales are included, even if some dimension data is missing. Alias columns for clarity and usability in BI tools.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 17".
 
   - [ ] Read as a stream from `LIVE.02_silver.silver_sales_transactions`.
   - [ ] Read `LIVE.silver_customers_current`, `LIVE.silver_products_current`, and `LIVE.silver_stores_current` as static/lookup tables.
@@ -409,9 +443,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 18: Create `03_gold.gold_daily_sales_by_store` Aggregate Table**
 
-  - _Business logic:_ Aggregate denormalized sales facts by store and day, calculating total revenue, transaction count, items sold, and unique customers. This enables daily performance tracking for each store.
-  - _Tip:_ Run the pipeline after this step to validate aggregations and reporting logic.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 18".
+  - Tips
+
+    - _Business logic:_ Aggregate denormalized sales facts by store and day, calculating total revenue, transaction count, items sold, and unique customers. This enables daily performance tracking for each store.
+    - _Tip:_ Run the pipeline after this step to validate aggregations and reporting logic.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 18".
 
   - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
   - [ ] **Group by:**
@@ -437,9 +473,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 19: Create `03_gold.gold_product_performance` Aggregate Table**
 
-  - _Business logic:_ Product performance metrics drive merchandising, inventory, and marketing decisions.
-  - _Tip:_ Run the pipeline after this step to validate product performance metrics and aggregations.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 19".
+  - Tips
+
+    - _Business logic:_ Product performance metrics drive merchandising, inventory, and marketing decisions.
+    - _Tip:_ Run the pipeline after this step to validate product performance metrics and aggregations.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 19".
 
   - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
   - [ ] **Group by:** `product_id`, `product_name`, `product_category`.
@@ -456,9 +494,11 @@ To run this project end-to-end, complete the following setup steps in your Datab
 
 - **Task 20: Create `03_gold.gold_customer_lifetime_value` Aggregate Table**
 
-  - _Business logic:_ Customer lifetime value is a key metric for marketing and retention strategies.
-  - _Tip:_ Run the pipeline after this task to validate CLV calculations and aggregations.
-  - _Tip (code):_ If stuck, open final_dlt.py (under the "final dlt pipeline" folder) and search "Task 20".
+  - Tips
+
+    - _Business logic:_ Customer lifetime value is a key metric for marketing and retention strategies.
+    - _Tip:_ Run the pipeline after this task to validate CLV calculations and aggregations.
+    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 20".
 
   - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
   - [ ] **Group by:** `customer_id`, `customer_name`.
