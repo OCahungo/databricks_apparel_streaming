@@ -37,6 +37,7 @@ GOLD_CUSTOMER_LIFETIME_VALUE = f"{GOLD_SCHEMA}.gold_customer_lifetime_value"
 # 01 BRONZE: Raw Layer
 # -----------------------------------------
 
+# Task 1
 @dlt.table(name=BRONZE_SALES, comment = "Raw sales data")
 @dlt.expect_or_fail("valid_transaction_id", "transaction_id is not null")
 def bronze_sales():
@@ -57,6 +58,7 @@ def bronze_sales():
         .withColumn("tax_amount", F.col("tax_amount").cast("double"))
     )
 
+# Task 2
 @dlt.table(name=BRONZE_CUSTOMERS, comment="Raw customers data from landing zone")
 @dlt.expect_or_fail("valid_customer_id", "customer_id is not null")
 def bronze_customers():
@@ -76,6 +78,7 @@ def bronze_customers():
         .withColumn("last_update_time", F.col("last_update_time").cast("timestamp"))
     )
 
+# Task 3
 @dlt.table(name=BRONZE_PRODUCTS, comment="Raw products data")
 @dlt.expect_or_fail("valid_product_id", "product_id is not null")
 def bronze_products():
@@ -95,6 +98,7 @@ def bronze_products():
         .withColumn("last_update_time", F.col("last_update_time").cast("timestamp"))
     )
 
+# Task 4
 @dlt.table(name=BRONZE_STORES, comment="Raw stores data")
 @dlt.expect_or_fail("valid_store_id", "store_id is not null")
 def bronze_stores():
@@ -116,6 +120,7 @@ def bronze_stores():
 # 02A SILVER: Cleaned Streams (Intermediate Views)
 # -----------------------------------------
 
+# Task 5
 @dlt.view(name=CUSTOMERS_CLEANED_STREAM, comment="QC for customers stream")
 @dlt.expect_or_drop("valid_customer_id", "customer_id IS NOT NULL")
 @dlt.expect("valid_email", "email IS NULL OR email LIKE '%@%.%'")
@@ -125,6 +130,7 @@ def bronze_stores():
 def customers_cleaned_stream():
     return dlt.read_stream(BRONZE_CUSTOMERS)
 
+# Task 6
 @dlt.view(name=PRODUCTS_CLEANED_STREAM, comment="QC for products stream")
 @dlt.expect_or_drop("valid_product_id", "product_id IS NOT NULL")
 @dlt.expect_or_drop("valid_product_price", "price > 0 AND price < 10000")
@@ -134,6 +140,7 @@ def customers_cleaned_stream():
 def products_cleaned_stream():
     return dlt.read_stream(BRONZE_PRODUCTS)
 
+# Task 7
 @dlt.view(name=STORES_CLEANED_STREAM, comment="QC for stores stream")
 @dlt.expect_or_drop("valid_store_id", "store_id IS NOT NULL")
 @dlt.expect("valid_manager_name", "manager IS NOT NULL")
@@ -141,6 +148,7 @@ def products_cleaned_stream():
 def stores_cleaned_stream():
     return dlt.read_stream(BRONZE_STORES).withColumn("manager", F.coalesce(F.col("manager"), F.lit("Unknown")))
 
+# Task 8
 @dlt.view(name=SALES_CLEANED_STREAM, comment="QC for sales stream (fact)")
 @dlt.expect("valid_payment_method", "payment_method IN ('Cash', 'Credit Card', 'Debit Card', 'Mobile Pay', 'Gift Card')")
 @dlt.expect("realistic_discount", "discount_applied >= 0")
@@ -156,6 +164,7 @@ def sales_cleaned_stream():
 # 02B SILVER: Materialized SCD2 Business Dimension Tables
 # (using create_auto_cdc_flow)
 # -----------------------------------------
+# Task 9
 dlt.create_streaming_table(SILVER_CUSTOMERS)
 dlt.create_auto_cdc_flow(
     target=SILVER_CUSTOMERS,
@@ -168,6 +177,7 @@ dlt.create_auto_cdc_flow(
     stored_as_scd_type=2
 )
 
+# Task 10
 dlt.create_streaming_table(SILVER_PRODUCTS)
 dlt.create_auto_cdc_flow(
     target=SILVER_PRODUCTS,
@@ -180,6 +190,7 @@ dlt.create_auto_cdc_flow(
     stored_as_scd_type=2
 )
 
+# Task 11
 dlt.create_streaming_table(SILVER_STORES)
 dlt.create_auto_cdc_flow(
     target=SILVER_STORES,
@@ -192,6 +203,7 @@ dlt.create_auto_cdc_flow(
     stored_as_scd_type=2
 )
 
+# Task 12
 @dlt.table(name=SILVER_SALES_TRANSACTIONS, comment="Stream sales table (positive quantity)")
 @dlt.expect_or_drop("valid_discount", "discount_applied >= 0")
 @dlt.expect_or_drop("valid_store_id", "store_id IS NOT NULL")
@@ -203,6 +215,7 @@ def silver_sales_transactions():
         .filter(F.col("quantity") > 0)
     )
 
+# Task 13
 @dlt.table(name=SILVER_RETURNS_TRANSACTIONS, comment="Stream returns table (negative quantity)")
 @dlt.expect_or_drop("valid_discount", "discount_applied >= 0")
 @dlt.expect_or_drop("valid_store_id", "store_id IS NOT NULL")
@@ -222,6 +235,7 @@ def silver_returns_transactions():
 # (using __END_AT IS NULL for current, since create_auto_cdc_flow does not use _dlt_current)
 # -----------------------------------------
 
+# Task 14
 @dlt.view(
     name=SILVER_CUSTOMERS_CURRENT,
     comment="Current customers (SCD2)"
@@ -229,6 +243,7 @@ def silver_returns_transactions():
 def silver_customers_current():
     return dlt.read(SILVER_CUSTOMERS).filter(F.col("__END_AT").isNull())
 
+# Task 15
 @dlt.view(
     name=SILVER_PRODUCTS_CURRENT,
     comment="Current products (SCD2)"
@@ -236,6 +251,7 @@ def silver_customers_current():
 def silver_products_current():
     return dlt.read(SILVER_PRODUCTS).filter(F.col("__END_AT").isNull())
 
+# Task 16
 @dlt.view(
     name=SILVER_STORES_CURRENT,
     comment="Current stores (SCD2)"
@@ -247,6 +263,7 @@ def silver_stores_current():
 # 03 GOLD: Denormalized Analytics and Aggregates
 # -----------------------------------------
 
+# Task 17
 @dlt.table(
     name=GOLD_DENORMALIZED_SALES_FACTS,
     comment="Fully denormalized sales fact table for analytic use. A streaming table."
@@ -282,6 +299,7 @@ def denormalized_sales_facts():
     )
     return df
 
+# Task 18
 @dlt.table(
     name=GOLD_DAILY_SALES_BY_STORE,
     comment="Daily store sales summary. A batch table."
@@ -312,6 +330,7 @@ def gold_daily_sales_by_store():
     )
     return agg
 
+# Task 19
 @dlt.table(
     name=GOLD_PRODUCT_PERFORMANCE,
     comment="Product sales performance metrics. A batch table."
@@ -328,6 +347,7 @@ def gold_product_performance():
     )
     return agg
 
+# Task 20
 @dlt.table(
     name=GOLD_CUSTOMER_LIFETIME_VALUE,
     comment="Customer lifetime value metrics. A batch table."
