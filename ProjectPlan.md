@@ -61,7 +61,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
 ## DLT Pipeline Reconstruction Checklist
 
 > **How to approach the checklist:**  
-> For each task, think about the business logic, data quality, and transformation required. Use the synthetic data generator's quirks (see [SynteticDataGenerator.md](SynteticDataGenerator.md)) to inform your design. Try to reason about why each expectation or transformation is needed.
+> For each task, think about the business logic, data quality, and transformation required. Use the synthetic data generator's quirks (see [SynteticDataGenerator.md](SynteticDataGenerator.md)) to inform your design. It also covers schema of the synthetic data. Try to reason about why each expectation or transformation is needed.
 
 ### ✅ Bronze Layer: Raw Data Ingestion
 
