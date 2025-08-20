@@ -40,7 +40,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
    - The repo will appear as a folder in your workspace, allowing you to edit, run notebooks, and manage files directly from Databricks.
    - For more details, see the official Databricks documentation: [Repos in Databricks](https://docs.databricks.com/repos/index.html).
 
-3. **Run the "utils/Setup Environment" notebook to set up a catalog, schemas and volumes for the synthetic data generator**. It will use the paths defined in the variables file for creating appropriate objects in Unity Catalog.
+3. **Run the "Setup Environment" notebook to set up a catalog, schemas and volumes for the synthetic data generator**. It will use the paths defined in the variables file for creating appropriate objects in Unity Catalog.
 
 4. **Create and Configure a DLT Pipeline**
 
@@ -52,7 +52,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
    - Set the source folder to this folder, and the source code as the "your_dlt_pipeline" file.
    - **Tip:** Review the DLT pipeline settings and documentation. Understand the difference between streaming and batch tables.
 
-5. **Run the synthetic data generator (`utils/data_generator.py`) to initialize some data.**
+5. **Run the synthetic data generator (`data_generator.py`) to initialize some data.**
    - It will stream infinitely until stopped, so stop it after a few minutes.
    - **Tip:** Check the output location and schema of the generated data. Use the provided markdown for table schemas and data quirks.
 
