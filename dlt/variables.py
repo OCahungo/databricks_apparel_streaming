@@ -1,5 +1,21 @@
-from variables import *
-# Import other required packages
+# --- Unified Path and Table Definitions ---
+
+CATALOG_NAME = "apparel_store"
+
+LANDING_SCHEMA = "00_landing"
+BRONZE_SCHEMA = "01_bronze"
+SILVER_SCHEMA = "02_silver"
+GOLD_SCHEMA = "03_gold"
+
+# Volume base paths
+RAW_STREAMING_VOLUME = f"{CATALOG_NAME}.{LANDING_SCHEMA}.streaming"
+RAW_STREAMING_PATH = f"/Volumes/{CATALOG_NAME}/{LANDING_SCHEMA}/streaming"
+
+# Raw data directories
+RAW_SALES_PATH = f"{RAW_STREAMING_PATH}/sales"
+RAW_CUSTOMERS_PATH = f"{RAW_STREAMING_PATH}/customers"
+RAW_PRODUCTS_PATH = f"{RAW_STREAMING_PATH}/items"
+RAW_STORES_PATH = f"{RAW_STREAMING_PATH}/stores"
 
 # -----------------------------------------
 # All table names
@@ -29,27 +45,3 @@ GOLD_DENORMALIZED_SALES_FACTS = f"{GOLD_SCHEMA}.denormalized_sales_facts"
 GOLD_DAILY_SALES_BY_STORE = f"{GOLD_SCHEMA}.gold_daily_sales_by_store"
 GOLD_PRODUCT_PERFORMANCE = f"{GOLD_SCHEMA}.gold_product_performance"
 GOLD_CUSTOMER_LIFETIME_VALUE = f"{GOLD_SCHEMA}.gold_customer_lifetime_value"
-
-# -----------------------------------------
-# 01 BRONZE: Raw Layer
-# -----------------------------------------
-
-# -----------------------------------------
-# 02A SILVER: Cleaned Streams (Intermediate Views)
-# -----------------------------------------
-
-
-# -----------------------------------------
-# 02B SILVER: Materialized SCD2 Business Dimension Tables
-# (using create_auto_cdc_flow)
-# -----------------------------------------
-
-
-# -----------------------------------------
-# 02C SILVER: Current State Views for Dimension Lookup
-# (using __END_AT IS NULL for current, since create_auto_cdc_flow does not use _dlt_current)
-# -----------------------------------------
-
-# -----------------------------------------
-# 03 GOLD: Denormalized Analytics and Aggregates
-# -----------------------------------------
