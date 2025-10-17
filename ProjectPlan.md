@@ -40,7 +40,7 @@ To run this project end-to-end, complete the following setup steps in your Datab
    - The repo will appear as a folder in your workspace, allowing you to edit, run notebooks, and manage files directly from Databricks.
    - For more details, see the official Databricks documentation: [Repos in Databricks](https://docs.databricks.com/repos/index.html).
 
-3. **Run the "setup_environment" notebook to set up a catalog, schemas and volumes for the synthetic data generator**. It will use the paths defined in the variables file for creating appropriate objects in Unity Catalog.
+3. **Run the "environment_setup" notebook to set up a catalog, schemas and volumes for the synthetic data generator**. It will use the paths defined in the variables file for creating appropriate objects in Unity Catalog.
 
 4. **Create and Configure a DLT Pipeline**
 

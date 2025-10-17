@@ -9,16 +9,21 @@ from variables import *
 # -----------------------------------------
 
 """
-- **Task 14: Create `silver_customers_current` View**
+Task 14: Create `silver_customers_current` View
+================================================
 
-  - Tips
+Business Logic:
+    Filter SCD2 customer table for current records (no end date), providing the latest 
+    snapshot for analytics and lookups.
 
-    - _Business logic:_ Filter SCD2 customer table for current records (no end date), providing the latest snapshot for analytics and lookups.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 14".
+Requirements:
+    [ ] Read from `02_silver.silver_customers`.
+    
+    [ ] Filter for records where the `__END_AT` column is NULL.
+        Business logic: Only records without an end date are considered current.
 
-  - [ ] Read from `02_silver.silver_customers`.
-  - [ ] Filter for records where the `__END_AT` column is `NULL`.
-    - _Business logic:_ Only records without an end date are considered current.
+Tip:
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
@@ -38,17 +43,22 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
-- **Task 15: Create `silver_products_current` View**
+Task 15: Create `silver_products_current` View
+===============================================
 
-  - Tips
+Business Logic:
+    Filter SCD2 product table for current records, ensuring analytics use the latest 
+    product attributes.
 
-    - _Business logic:_ Filter SCD2 product table for current records, ensuring analytics use the latest product attributes.
-    - _Tip:_ Run the pipeline after this step to validate current product view logic.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 15".
+Requirements:
+    [ ] Read from `02_silver.silver_products`.
+    
+    [ ] Filter for records where the `__END_AT` column is NULL.
+        Business logic: Only records without an end date are considered current.
 
-  - [ ] Read from `02_silver.silver_products`.
-  - [ ] Filter for records where the `__END_AT` column is `NULL`.
-    - _Business logic:_ Only records without an end date are considered current.
+Tips:
+    - Run the pipeline after this step to validate current product view logic.
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
@@ -68,17 +78,22 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
-- **Task 16: Create `silver_stores_current` View**
+Task 16: Create `silver_stores_current` View
+=============================================
 
-  - Tips
+Business Logic:
+    Filter SCD2 store table for current records, ensuring analytics use the latest 
+    store attributes.
 
-    - _Business logic:_ Filter SCD2 store table for current records, ensuring analytics use the latest store attributes.
-    - _Tip:_ Run the pipeline after this step to validate current store view logic.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 16".
+Requirements:
+    [ ] Read from `02_silver.silver_stores`.
+    
+    [ ] Filter for records where the `__END_AT` column is NULL.
+        Business logic: Only records without an end date are considered current.
 
-  - [ ] Read from `02_silver.silver_stores`.
-  - [ ] Filter for records where the `__END_AT` column is `NULL`.
-    - _Business logic:_ Only records without an end date are considered current.
+Tips:
+    - Run the pipeline after this step to validate current store view logic.
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###

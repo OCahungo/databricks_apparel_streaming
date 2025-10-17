@@ -9,32 +9,54 @@ from variables import *
 # -----------------------------------------
 
 """
-### **✅ Gold Layer: Business-Ready Analytics**
+✅ Gold Layer: Business-Ready Analytics
+========================================
 
-- **Goal:** Create denormalized and aggregated tables for direct use by analysts and BI tools. This layer delivers business value by joining, enriching, and summarizing data for reporting and decision-making.
-- **Table Name Prefix:** `03_gold.`
-- **Gold Layer Tips:**
+Goal:
+    Create denormalized and aggregated tables for direct use by analysts and BI tools. 
+    This layer delivers business value by joining, enriching, and summarizing data for 
+    reporting and decision-making.
 
-  - Focus on joins and aggregations. This is where you create business value from your data.
-  - Think about how analysts will use these tables for reporting and BI.
-  - For a more interactive experience, run the `data_generator.py` script while testing your pipeline. This will continuously generate new data, allowing you to observe how each layer processes incoming records in real time. You can stop and restart the generator as needed to see immediate effects in your tables and views.
+Table Name Prefix:
+    03_gold.
+
+Gold Layer Tips:
+    - Focus on joins and aggregations. This is where you create business value from your data.
+    - Think about how analysts will use these tables for reporting and BI.
+    - For a more interactive experience, run the `data_generator.py` script while 
+      testing your pipeline. This will continuously generate new data, allowing you 
+      to observe how each layer processes incoming records in real time. You can stop 
+      and restart the generator as needed to see immediate effects in your tables and views.
 """
 
 """
-- **Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table**
+Task 17: Create `03_gold.denormalized_sales_facts` Streaming Table
+===================================================================
 
-  - Tips
+Business Logic:
+    Join sales transactions with current dimension tables to enrich each sale with 
+    customer, product, and store attributes. Use left joins to ensure all sales are 
+    included, even if some dimension data is missing. Alias columns for clarity and 
+    usability in BI tools.
 
-    - _Business logic:_ Join sales transactions with current dimension tables to enrich each sale with customer, product, and store attributes. Use left joins to ensure all sales are included, even if some dimension data is missing. Alias columns for clarity and usability in BI tools.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 17".
+Requirements:
+    [ ] Read as a stream from `LIVE.02_silver.silver_sales_transactions`.
+    
+    [ ] Read `LIVE.silver_customers_current`, `LIVE.silver_products_current`, and 
+        `LIVE.silver_stores_current` as static/lookup tables.
+        Business logic: Lookup tables provide the latest dimension attributes for each sale.
+    
+    [ ] Join Logic: `left` join the sales stream with stores, then customers, then products 
+        on their respective IDs.
+        Business logic: Left joins ensure all sales are included, even if some dimension 
+        data is missing.
+    
+    [ ] Select & Alias Columns: Construct the final schema with aliased columns like 
+        `customer_name`, `product_name`, and `store_name`.
+        Business logic: Aliased columns make reporting and analysis easier for business users.
 
-  - [ ] Read as a stream from `LIVE.02_silver.silver_sales_transactions`.
-  - [ ] Read `LIVE.silver_customers_current`, `LIVE.silver_products_current`, and `LIVE.silver_stores_current` as static/lookup tables.
-    - _Business logic:_ Lookup tables provide the latest dimension attributes for each sale.
-  - [ ] **Join Logic:** `left` join the sales stream with stores, then customers, then products on their respective IDs.
-    - _Business logic:_ Left joins ensure all sales are included, even if some dimension data is missing.
-  - [ ] **Select & Alias Columns:** Construct the final schema with aliased columns like `customer_name`, `product_name`, and `store_name`.
-    - _Business logic:_ Aliased columns make reporting and analysis easier for business users.
+Tip:
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
@@ -83,34 +105,47 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
-- **Task 18: Create `03_gold.gold_daily_sales_by_store` Aggregate Table**
+Task 18: Create `03_gold.gold_daily_sales_by_store` Aggregate Table
+====================================================================
 
-  - Tips
+Business Logic:
+    Aggregate denormalized sales facts by store and day, calculating total revenue, 
+    transaction count, items sold, and unique customers. This enables daily performance 
+    tracking for each store.
 
-    - _Business logic:_ Aggregate denormalized sales facts by store and day, calculating total revenue, transaction count, items sold, and unique customers. This enables daily performance tracking for each store.
-    - _Tip:_ Run the pipeline after this step to validate aggregations and reporting logic.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 18".
+Requirements:
+    [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
+    
+    [ ] Group by:
+        - A `1 day` window on `event_time`.
+          Business logic: Daily windows align with business reporting cycles.
+        
+        - `store_id`
+          Business logic: Store-level grouping enables location-based analysis.
+        
+        - `store_name`
+          Business logic: Store names make reports more readable.
+    
+    [ ] Calculate Aggregations:
+        - `total_revenue`: `round(sum(total_amount), 2)`
+          Business logic: Total revenue is a primary business KPI.
+        
+        - `total_transactions`: `count(transaction_id)`
+          Business logic: Transaction count helps track store activity.
+        
+        - `total_items_sold`: `sum(quantity)`
+          Business logic: Items sold is important for inventory and sales analysis.
+        
+        - `unique_customers`: `countDistinct(customer_id)`
+          Business logic: Unique customers help measure store reach and loyalty.
+    
+    [ ] Final Select: Choose the grouping columns and aggregated metrics, casting the 
+        window start time to a `sale_date`.
+        Business logic: Sale date is essential for time-based reporting.
 
-  - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
-  - [ ] **Group by:**
-    - A `1 day` window on `event_time`.
-      - _Business logic:_ Daily windows align with business reporting cycles.
-    - `store_id`
-      - _Business logic:_ Store-level grouping enables location-based analysis.
-    - `store_name`
-      - _Business logic:_ Store names make reports more readable.
-  - [ ] **Calculate Aggregations:**
-    - `total_revenue`: `round(sum(total_amount), 2)`
-      - _Business logic:_ Total revenue is a primary business KPI.
-    - `total_transactions`: `count(transaction_id)`
-      - _Business logic:_ Transaction count helps track store activity.
-    - `total_items_sold`: `sum(quantity)`
-      - _Business logic:_ Items sold is important for inventory and sales analysis.
-    - `unique_customers`: `countDistinct(customer_id)`
-      - _Business logic:_ Unique customers help measure store reach and loyalty.
-  - [ ] **Final Select:** Choose the grouping columns and aggregated metrics, casting the window start time to a `sale_date`.
-    - _Business logic:_ Sale date is essential for time-based reporting.
-
+Tips:
+    - Run the pipeline after this step to validate aggregations and reporting logic.
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
@@ -154,26 +189,31 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
+Task 19: Create `03_gold.gold_product_performance` Aggregate Table
+===================================================================
 
-- **Task 19: Create `03_gold.gold_product_performance` Aggregate Table**
+Business Logic:
+    Product performance metrics drive merchandising, inventory, and marketing decisions.
 
-  - Tips
+Requirements:
+    [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
+    
+    [ ] Group by: `product_id`, `product_name`, `product_category`.
+        Business logic: Grouping by product attributes enables detailed analysis.
+    
+    [ ] Calculate Aggregations:
+        - `total_revenue`: `round(sum(total_amount), 2)`
+          Business logic: Revenue by product is key for profitability analysis.
+        
+        - `total_quantity_sold`: `round(sum(quantity), 2)`
+          Business logic: Quantity sold helps with inventory planning.
+        
+        - `total_orders`: `count(transaction_id)`
+          Business logic: Order count is useful for demand forecasting.
 
-    - _Business logic:_ Product performance metrics drive merchandising, inventory, and marketing decisions.
-    - _Tip:_ Run the pipeline after this step to validate product performance metrics and aggregations.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 19".
-
-  - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
-  - [ ] **Group by:** `product_id`, `product_name`, `product_category`.
-    - _Business logic:_ Grouping by product attributes enables detailed analysis.
-  - [ ] **Calculate Aggregations:**
-    - `total_revenue`: `round(sum(total_amount), 2)`
-      - _Business logic:_ Revenue by product is key for profitability analysis.
-    - `total_quantity_sold`: `round(sum(quantity), 2)`
-      - _Business logic:_ Quantity sold helps with inventory planning.
-    - `total_orders`: `count(transaction_id)`
-      - _Business logic:_ Order count is useful for demand forecasting.
-
+Tips:
+    - Run the pipeline after this step to validate product performance metrics and aggregations.
+    - If stuck, see the solution below.
 """
 
 ### ---------------------
@@ -203,31 +243,37 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
+Task 20: Create `03_gold.gold_customer_lifetime_value` Aggregate Table
+=======================================================================
 
-- **Task 20: Create `03_gold.gold_customer_lifetime_value` Aggregate Table**
+Business Logic:
+    Customer lifetime value is a key metric for marketing and retention strategies.
 
-  - Tips
+Requirements:
+    [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
+    
+    [ ] Group by: `customer_id`, `customer_name`.
+        Business logic: Grouping by customer enables personalized analytics.
+    
+    [ ] Calculate Aggregations:
+        - `total_spend`: `round(sum(total_amount), 2)`
+          Business logic: Total spend is the foundation of CLV.
+        
+        - `total_orders`: `countDistinct(transaction_id)`
+          Business logic: Order count shows engagement.
+        
+        - `first_purchase_date`: `min(event_time)` cast to date.
+          Business logic: First purchase date helps track customer lifecycle.
+        
+        - `last_purchase_date`: `max(event_time)` cast to date.
+          Business logic: Last purchase date helps track retention.
+        
+        - `avg_order_value`: `round(avg(total_amount), 2)`
+          Business logic: Average order value is a key marketing metric.
 
-    - _Business logic:_ Customer lifetime value is a key metric for marketing and retention strategies.
-    - _Tip:_ Run the pipeline after this task to validate CLV calculations and aggregations.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 20".
-
-  - [ ] Read from `LIVE.03_gold.denormalized_sales_facts`.
-  - [ ] **Group by:** `customer_id`, `customer_name`.
-    - _Business logic:_ Grouping by customer enables personalized analytics.
-  - [ ] **Calculate Aggregations:**
-    - `total_spend`: `round(sum(total_amount), 2)`
-      - _Business logic:_ Total spend is the foundation of CLV.
-    - `total_orders`: `countDistinct(transaction_id)`
-      - _Business logic:_ Order count shows engagement.
-    - `first_purchase_date`: `min(event_time)` cast to date.
-      - _Business logic:_ First purchase date helps track customer lifecycle.
-    - `last_purchase_date`: `max(event_time)` cast to date.
-      - _Business logic:_ Last purchase date helps track retention.
-    - `avg_order_value`: `round(avg(total_amount), 2)`
-      - _Business logic:_ Average order value is a key marketing metric.
-
-
+Tips:
+    - Run the pipeline after this task to validate CLV calculations and aggregations.
+    - If stuck, see the solution below.
 """
 
 ### ---------------------

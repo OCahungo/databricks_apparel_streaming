@@ -10,25 +10,35 @@ from variables import *
 # -----------------------------------------
 
 """
-- **Task 12: Create the `02_silver.silver_sales_transactions` Table**
+Task 12: Create the `02_silver.silver_sales_transactions` Table
+================================================================
 
-  - Tips
+Business Logic:
+    Filter sales records to include only positive quantities (actual sales), and drop 
+    records with invalid discounts or missing foreign keys. This ensures only valid 
+    sales transactions are available for analytics.
 
-    - _Business logic:_ Filter sales records to include only positive quantities (actual sales), and drop records with invalid discounts or missing foreign keys. This ensures only valid sales transactions are available for analytics.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 12".
+Requirements:
+    [ ] Read from the `live.sales_cleaned_stream`.
+    
+    [ ] Filter to include only records where `quantity > 0`.
+        Business logic: Negative or zero quantities are not valid sales.
+    
+    [ ] Apply Expectations:
+        - Drop if `discount_applied` is less than 0.
+          Business logic: Negative discounts are not possible in real sales.
+        
+        - Drop if `store_id` is NULL.
+          Business logic: Store ID is required for all store-level analytics.
+        
+        - Drop if `customer_id` is NULL.
+          Business logic: Customer ID is required for all customer-level analytics.
+        
+        - Drop if `product_id` is NULL.
+          Business logic: Product ID is required for all product-level analytics.
 
-  - [ ] Read from the `live.sales_cleaned_stream`.
-  - [ ] Filter to include only records where `quantity > 0`.
-    - _Business logic:_ Negative or zero quantities are not valid sales.
-  - [ ] **Apply Expectations:**
-    - Drop if `discount_applied` is less than 0.
-      - _Business logic:_ Negative discounts are not possible in real sales.
-    - Drop if `store_id` is `NULL`.
-      - _Business logic:_ Store ID is required for all store-level analytics.
-    - Drop if `customer_id` is `NULL`.
-      - _Business logic:_ Customer ID is required for all customer-level analytics.
-    - Drop if `product_id` is `NULL`.
-      - _Business logic:_ Product ID is required for all product-level analytics.
+Tip:
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
@@ -53,26 +63,36 @@ from variables import *
 ##########################################################################################
 ##########################################################################################
 """
-- **Task 13: Create the `02_silver.silver_returns_transactions` Table**
+Task 13: Create the `02_silver.silver_returns_transactions` Table
+==================================================================
 
-  - Tips
+Business Logic:
+    Filter sales records to include only negative quantities (returns), transform to 
+    absolute values for reporting, and drop records with invalid discounts or missing 
+    foreign keys. This ensures returns are tracked separately and accurately.
 
-    - _Business logic:_ Filter sales records to include only negative quantities (returns), transform to absolute values for reporting, and drop records with invalid discounts or missing foreign keys. This ensures returns are tracked separately and accurately.
-    - _Tip:_ Run the pipeline after this step to validate returns processing and expectations.
-    - _Tip (code):_ If stuck, open `final_dlt.py` (under the `final dlt pipeline` folder) and search "Task 13".
+Requirements:
+    [ ] Read from the `live.sales_cleaned_stream`.
+    
+    [ ] Filter to include only records where `quantity < 0`.
+        Business logic: Only negative quantities should be considered returns.
+    
+    [ ] Apply Transformations:
+        - Create `returned_quantity` column using the absolute value of `quantity`.
+          Business logic: Absolute value makes reporting and analysis easier.
+        
+        - Create `returned_amount` column using the absolute value of `total_amount`.
+          Business logic: Absolute value makes reporting and analysis easier.
+        
+        - Drop the original `quantity` and `total_amount` columns.
+          Business logic: Removes ambiguity in reporting.
+    
+    [ ] Apply the same four "expect or drop" quality rules as the sales transactions table.
+        Business logic: Ensures returns data is as clean as sales data.
 
-  - [ ] Read from the `live.sales_cleaned_stream`.
-  - [ ] Filter to include only records where `quantity < 0`.
-    - _Business logic:_ Only negative quantities should be considered returns.
-  - [ ] **Apply Transformations:**
-    - Create `returned_quantity` column using the absolute value of `quantity`.
-      - _Business logic:_ Absolute value makes reporting and analysis easier.
-    - Create `returned_amount` column using the absolute value of `total_amount`.
-      - _Business logic:_ Absolute value makes reporting and analysis easier.
-    - Drop the original `quantity` and `total_amount` columns.
-      - _Business logic:_ Removes ambiguity in reporting.
-  - [ ] Apply the same four "expect or drop" quality rules as the sales transactions table.
-    - _Business logic:_ Ensures returns data is as clean as sales data.
+Tips:
+    - Run the pipeline after this step to validate returns processing and expectations.
+    - If stuck, see the solution below.
 """
 ### ---------------------
 ### Write Your Code Here ###
